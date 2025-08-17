@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <style>
+    :root {
+      --bg: linear-gradient(135deg, #4f46e5, #3b82f6, #06b6d4);
+      --card: rgba(255, 255, 255, 0.95);
+      --text: #1e293b;
+      --muted: #64748b;
+      --primary: #3b82f6;
+      --primary-weak: #dbeafe;
+      --error: #dc2626;
+      --success: #16a34a;
+      --ring: 0 0 0 4px rgba(59, 130, 246, 0.25);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', ui-sans-serif, system-ui;
+      background: var(--bg);
+      color: var(--text);
+      display: grid; place-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%; max-width: 440px;
+      background: var(--card);
+      border-radius: var(--radius);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      overflow: hidden;
+      border: none;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header {
+      padding: 32px 28px 12px;
+      text-align: center;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      color: white;
+    }
+    .header h1 {
+      margin: 0 0 8px; font-weight: 700; font-size: 1.8rem;
+    }
+    .header p { margin: 0; font-size: 1rem; opacity: 0.9; }
+
+    form { padding: 26px 28px 32px; }
+
+    .input-group { margin-bottom: 18px; }
+    label { display: block; font-size: 0.9rem; margin-bottom: 8px; color: var(--text); font-weight: 600; }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      background: #f8fafc;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease, transform .1s ease;
+      font-size: 1rem;
+    }
+    input::placeholder { color: #94a3b8; }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: var(--ring);
+      transform: scale(1.01);
+    }
+    input.error { border-color: var(--error); box-shadow: 0 0 0 4px rgba(220,38,38,0.12); }
+    input.valid { border-color: var(--success); box-shadow: 0 0 0 4px rgba(22,163,74,0.12); }
+
+    .error-text, .hint { display: block; margin-top: 6px; font-size: 0.85rem; }
+    .error-text { color: var(--error); min-height: 1.1em; }
+    .hint { color: var(--muted); font-size: 0.8rem; }
+
+    .actions { margin-top: 22px; display: grid; gap: 12px; }
+
+    button {
+      padding: 14px 18px; font-size: 1.05rem; font-weight: 600; border: 0; border-radius: 14px;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      color: white; cursor: pointer;
+      transition: transform .1s ease, filter .2s ease, box-shadow .2s ease;
+      box-shadow: 0 10px 25px rgba(59,130,246,0.35);
+    }
+    button:hover { filter: brightness(1.08); transform: translateY(-2px); }
+    button:active { transform: translateY(1px); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
+
+    .note { text-align: center; color: var(--muted); font-size: 0.9rem; }
+
+    .alert {
+      margin: 0 28px 20px; padding: 14px 16px; border-radius: 12px; font-size: 0.95rem;
+      display: none; font-weight: 500;
+    }
+    .alert.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .alert.error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+    .foot {
+      padding: 0 28px 26px; text-align: center; font-size: .9rem; color: var(--muted);
+    }
+    .foot a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .foot a:hover { text-decoration: underline; }
+
+    @media (max-width: 420px){
+      .header h1 { font-size: 1.5rem; }
+      form { padding: 20px; }
+      .alert { margin: 0 18px 16px; }
+      .foot { padding: 0 18px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card" role="region" aria-label="Sign-up card">
+    <div class="header">
+      <h1>Create your account</h1>
+      <p>Join us in under a minute.</p>
+    </div>
+
+    <div id="formAlert" class="alert" aria-live="polite"></div>
+
+    <form id="signupForm" novalidate>
+      <div class="input-group">
+        <label for="fullName">Full Name</label>
+        <input id="fullName" name="fullName" type="text" placeholder="e.g., Ada Lovelace" autocomplete="name" required />
+        <small class="error-text" id="nameError" aria-live="polite"></small>
+      </div>
+
+      <div class="input-group">
+        <label for="email">Email Address</label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+        <small class="error-text" id="emailError" aria-live="polite"></small>
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="At least 8 characters" autocomplete="new-password" required />
+        <small class="hint">Use 8+ characters with at least 1 letter and 1 number.</small>
+        <small class="error-text" id="passwordError" aria-live="polite"></small>
+      </div>
+
+      <div class="actions">
+        <button id="submitBtn" type="submit">Sign Up</button>
+        <p class="note">By signing up, you agree to our Terms and Privacy Policy.</p>
+      </div>
+    </form>
+
+    <div class="foot">Already have an account? <a href="#" aria-label="Go to sign in">Sign in</a></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('signupForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const alertBox = document.getElementById('formAlert');
+
+    const fields = {
+      fullName: {
+        el: document.getElementById('fullName'),
+        error: document.getElementById('nameError'),
+        validate: (v) => v.trim().length >= 2 || 'Please enter your full name (2+ characters).'
+      },
+      email: {
+        el: document.getElementById('email'),
+        error: document.getElementById('emailError'),
+        validate: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) || 'Enter a valid email address.'
+      },
+      password: {
+        el: document.getElementById('password'),
+        error: document.getElementById('passwordError'),
+        validate: (v) => (/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(v) || 'Password must be at least 8 characters and include a letter and a number.')
+      }
+    };
+
+    const setFieldState = (el, errorEl, message) => {
+      if (message === true) {
+        el.classList.remove('error');
+        el.classList.add('valid');
+        errorEl.textContent = '';
+        return true;
+      } else {
+        el.classList.remove('valid');
+        el.classList.add('error');
+        errorEl.textContent = message;
+        return false;
+      }
+    };
+
+    Object.values(fields).forEach(({ el, error, validate }) => {
+      el.addEventListener('input', () => {
+        const result = validate(el.value);
+        setFieldState(el, error, result);
+      });
+      el.addEventListener('blur', () => {
+        const result = validate(el.value);
+        setFieldState(el, error, result);
+      });
+    });
+
+    const showAlert = (type, msg) => {
+      alertBox.className = `alert ${type}`;
+      alertBox.textContent = msg;
+      alertBox.style.display = 'block';
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alertBox.style.display = 'none';
+
+      let allGood = true;
+      for (const key in fields) {
+        const { el, error, validate } = fields[key];
+        const result = validate(el.value);
+        const ok = setFieldState(el, error, result);
+        if (!ok && allGood) {
+          el.focus();
+        }
+        allGood = allGood && ok;
+      }
+
+      if (!allGood) {
+        showAlert('error', 'Please fix the highlighted fields and try again.');
+        return;
+      }
+
+      // Demo: pretend to submit
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating account…';
+      setTimeout(() => {
+        showAlert('success', 'Account created successfully! You can now sign in.');
+        form.reset();
+        Object.values(fields).forEach(({ el }) => el.classList.remove('valid', 'error'));
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign Up';
+      }, 800);
+    });
+  </script>
+</body>
+</html>
+
